@@ -15,7 +15,7 @@ class HomePage(private val driver: AndroidDriver) {
         val wait = WebDriverWait(driver, Duration.ofSeconds(10))
         val discountLinkElement = wait.until(ExpectedConditions.presenceOfElementLocated(discountLinkLocator))
         discountLinkElement.click()
-        return discountLinkElement // Or return a new Page Object if navigation occurs
+        return discountLinkElement
     }
 
 }

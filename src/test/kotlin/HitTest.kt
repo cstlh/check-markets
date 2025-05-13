@@ -42,12 +42,51 @@ class HitTest {
     }
 
     @Test
-    fun checkDiscount() {
+    fun test(){
         homePage.clickDiscountLink()
-        discountPage.clickSearchInput()
-        discountPage.enterSearchText("pepsi")
-        discountPage.clickSearchInput()
-        discountPage.findHeadlineInContainersWithText("pepsi")?.click();
+        val itemsToTest = listOf("pepsi", "ben&Jerry's", "magnum") // put this in file later
+        itemsToTest.forEach { item ->
+            val hasDiscount = checkDiscount(item)
+            if (hasDiscount) {
+                println("Discount found for: $item")
+            } else {
+                println("No discount found for: $item")
+            }
+        }
     }
+
+    fun checkDiscount(text: String): Boolean {
+        discountPage.clickSearchInput()
+        discountPage.enterSearchText(text)
+        discountPage.clickSearchInput()
+        val found = discountPage.findHeadlineInContainersWithText(text)
+        discountPage.clearSearchInput()
+        return found
+    }
+
+    @Test
+    fun test2(){
+        homePage.clickDiscountLink()
+        val itemsToTest = listOf("pepsi", "ben&Jerry's", "magnum", "true fruits") // put this in file later
+        itemsToTest.forEach { item ->
+            val discountTextList = checkDiscount2(item)
+            if (discountTextList?.isNotEmpty() == true) {
+                println("Discount found for: $item - $discountTextList")
+            } else {
+                println("No discount found for: $item")
+            }
+            println("---------------------")
+        }
+    }
+
+    fun checkDiscount2(text: String): Set<String>? {
+        discountPage.clickSearchInput()
+        discountPage.enterSearchText(text)
+        discountPage.clickSearchInput()
+        val found = discountPage.getProductTextsForMatchingHeadlines(text)
+        discountPage.clearSearchInput()
+        return found
+    }
+
 }
 
