@@ -2,50 +2,44 @@ package org.example
 
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.MobileCapabilityType
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openqa.selenium.remote.DesiredCapabilities
 import java.io.File
 
 class HitTest {
 
-    companion object {
-        private var driver: AndroidDriver? = null
-        private lateinit var homePage: HomePage
-        private lateinit var discountPage: DiscountPage // Added DiscountPage
+    private lateinit var driver: AndroidDriver
+    private lateinit var homePage: HomePage
+    private lateinit var discountPage: DiscountPage
 
-        @BeforeAll
-        @JvmStatic
-        fun setUp() {
-            val capabilities = DesiredCapabilities()
-            capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
-            capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel_7")
-            capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2")
-            capabilities.setCapability("appPackage", "de.hit.android.hitapp",)
-            capabilities.setCapability("appActivity", "de.hit.three.presentation.MainActivity")
-            capabilities.setCapability(MobileCapabilityType.NO_RESET, true)
-            capabilities.setCapability("forceAppLaunch", true);
+    @BeforeEach
+    fun setUp() {
+        val capabilities = DesiredCapabilities()
+        capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android")
+        capabilities.setCapability(MobileCapabilityType.DEVICE_NAME, "Pixel_7")
+        capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "UiAutomator2")
+        capabilities.setCapability("appPackage", "de.hit.android.hitapp")
+        capabilities.setCapability("appActivity", "de.hit.three.presentation.MainActivity")
+        capabilities.setCapability(MobileCapabilityType.NO_RESET, true)
+        capabilities.setCapability("forceAppLaunch", true)
 
+        val url = java.net.URI("http://127.0.0.1:4723/").toURL()
+        driver = AndroidDriver(url, capabilities)
+        homePage = HomePage(driver)
+        discountPage = DiscountPage(driver)
+    }
 
-            // Replace with your Appium server URL
-            val url = java.net.URI("http://127.0.0.1:4723/").toURL()
-            driver = AndroidDriver(url, capabilities)
-            homePage = HomePage(driver!!)
-            discountPage = DiscountPage(driver!!)
-        }
-
-        @AfterAll
-        @JvmStatic
-        fun tearDown() {
-            driver?.quit()
-        }
+    @AfterEach
+    fun tearDown() {
+        driver.quit()
     }
 
     @Test
-    fun test(){
+    fun test() {
         homePage.clickDiscountLink()
-        val itemsToTest = listOf("pepsi", "ben&Jerry's", "magnum") // put this in file later
+        val itemsToTest = listOf("pepsi", "ben&Jerry's", "magnum")
         itemsToTest.forEach { item ->
             val hasDiscount = checkDiscount(item)
             if (hasDiscount) {
@@ -59,20 +53,18 @@ class HitTest {
     fun checkDiscount(text: String): Boolean {
         discountPage.clickSearchInput()
         discountPage.enterSearchText(text)
-        //discountPage.clickSearchInput()
-        // hide keyboard
-        driver?.hideKeyboard();
+        driver.hideKeyboard()
         val found = discountPage.findHeadlineInContainersWithText(text)
         discountPage.clearSearchInput()
         return found
     }
 
     @Test
-    fun test2(){
+    fun test2() {
         homePage.clickDiscountLink()
         val itemsFile = File("src/test/resources/items_to_test.txt")
-        val resultsFile = File("src/test/resources/test_results.csv") // Changed to .csv
-        resultsFile.writeText("Market,Search Term,Product Text\n") // Add CSV header
+        val resultsFile = File("src/test/resources/test_results.csv")
+        resultsFile.writeText("Market,Search Term,Product Text\n")
 
         val itemsToTest = itemsFile.readLines().filter { it.isNotBlank() }
 
@@ -80,8 +72,8 @@ class HitTest {
             val discountTextList = checkDiscount2(item)
             if (discountTextList?.isNotEmpty() == true) {
                 val resultString = "Hit,\"$item\",\"${discountTextList.joinToString(", ")}\""
-                println("Discount found for: $item - $discountTextList") //temp log
-                println("---------------------") //temp log
+                println("Discount found for: $item - $discountTextList")
+                println("---------------------")
                 resultsFile.appendText("$resultString\n")
             }
         }
@@ -90,9 +82,7 @@ class HitTest {
     fun checkDiscount2(text: String): Set<String>? {
         discountPage.clickSearchInput()
         discountPage.enterSearchText(text)
-        //discountPage.clickSearchInput()
-        // hide keyboard
-        driver?.hideKeyboard();
+        driver.hideKeyboard()
         val found = discountPage.getProductTextsForMatchingHeadlines(text)
         discountPage.clearSearchInput()
         return found
