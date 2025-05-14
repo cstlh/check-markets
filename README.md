@@ -9,5 +9,7 @@ Small test script to search for discounts in apps using Appium/Kotlin, really lo
 
 ### Commands to find package name and activity name
 `adb shell pm list packages | grep "hit"`
+
 Open the app and run the command:
+
 `adb shell dumpsys window | grep "mCurrentFocus"`
