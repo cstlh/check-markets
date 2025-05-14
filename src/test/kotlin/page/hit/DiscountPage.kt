@@ -1,7 +1,8 @@
-package org.example
+package org.example.page.hit
 
 import io.appium.java_client.AppiumBy
 import io.appium.java_client.android.AndroidDriver
+import org.openqa.selenium.NoSuchElementException
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
@@ -38,7 +39,7 @@ class DiscountPage(private val driver: AndroidDriver) {
                 if (headlineElement.text.contains(text, ignoreCase = true)) {
                     return true
                 }
-            } catch (_: org.openqa.selenium.NoSuchElementException) {
+            } catch (_: NoSuchElementException) {
                 // Headline not found in this container, continue to the next one
             }
         }
@@ -56,11 +57,11 @@ class DiscountPage(private val driver: AndroidDriver) {
                     try {
                         val productTextElement = containerElement.findElement(productTextLocator)
                         matchingProductTexts.add(productTextElement.text)
-                    } catch (_: org.openqa.selenium.NoSuchElementException) {
+                    } catch (_: NoSuchElementException) {
                         // Product text not found in this container
                     }
                 }
-            } catch (_: org.openqa.selenium.NoSuchElementException) {
+            } catch (_: NoSuchElementException) {
                 // Headline not found in this container, continue to the next one
             }
         }

@@ -1,4 +1,4 @@
-package org.example
+package org.example.page.hit
 
 import io.appium.java_client.AppiumBy
 import io.appium.java_client.android.AndroidDriver
@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.time.Duration
 
-class HomePage(private val driver: AndroidDriver) {
+class FooterPage(private val driver: AndroidDriver) {
 
     private val discountLinkLocator = AppiumBy.androidUIAutomator("new UiSelector().text(\"Angebote\")")
 

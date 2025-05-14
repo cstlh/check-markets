@@ -2,6 +2,8 @@ package org.example
 
 import io.appium.java_client.android.AndroidDriver
 import io.appium.java_client.remote.MobileCapabilityType
+import org.example.page.hit.DiscountPage
+import org.example.page.hit.FooterPage
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -11,7 +13,7 @@ import java.io.File
 class HitTest {
 
     private lateinit var driver: AndroidDriver
-    private lateinit var homePage: HomePage
+    private lateinit var footerPage: FooterPage
     private lateinit var discountPage: DiscountPage
 
     @BeforeEach
@@ -27,7 +29,7 @@ class HitTest {
 
         val url = java.net.URI("http://127.0.0.1:4723/").toURL()
         driver = AndroidDriver(url, capabilities)
-        homePage = HomePage(driver)
+        footerPage = FooterPage(driver)
         discountPage = DiscountPage(driver)
     }
 
@@ -38,7 +40,7 @@ class HitTest {
 
     @Test
     fun test() {
-        homePage.clickDiscountLink()
+        footerPage.clickDiscountLink()
         val itemsToTest = listOf("pepsi", "ben&Jerry's", "magnum")
         itemsToTest.forEach { item ->
             val hasDiscount = checkDiscount(item)
@@ -61,7 +63,7 @@ class HitTest {
 
     @Test
     fun test2() {
-        homePage.clickDiscountLink()
+        footerPage.clickDiscountLink()
         val itemsFile = File("src/test/resources/items_to_test.txt")
         val resultsFile = File("src/test/resources/test_results.csv")
         resultsFile.writeText("Market,Search Term,Product Text\n")
