@@ -66,7 +66,7 @@ class HitTest {
         footerPage.clickDiscountLink()
         val itemsFile = File("src/test/resources/items_to_test.txt")
         val resultsFile = File("src/test/resources/test_results.csv")
-        resultsFile.writeText("Market,Search Term,Product Text\n")
+        resultsFile.writeText("Market,Search Term,Product Text,Price\n")
 
         val itemsToTest = itemsFile.readLines().filter { it.isNotBlank() }
 
